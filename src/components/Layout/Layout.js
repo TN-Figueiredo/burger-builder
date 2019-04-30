@@ -1,12 +1,13 @@
 import React from "react";
 
-import Aux from "../../hoc/Auxiliary";
+import Auxiliary from "../../hoc/Auxiliary";
+import "./Layout.css"
 
 const layout = props => (
-  <Aux>
+  <Auxiliary>
     <div>Toolbar, SideDrawer, Backdrop</div>
-    <main>{props.children}</main>
-  </Aux>
+    <main className="separating">{props.children}</main>
+  </Auxiliary>
 );
 
 export default layout;
