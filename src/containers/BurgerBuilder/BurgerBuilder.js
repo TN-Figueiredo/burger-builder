@@ -28,10 +28,23 @@ export default withErrorHandler(
     };
 
     componentDidMount() {
-      axios.get("/ingredients.json").then(response => {
-        this.setState({ ingredients: response.data });
-      })
-      .catch(error => this.setState({error: true}));
+      axios
+        .get("/ingredients.json")
+        .then(response => {
+          this.setState({ ingredients: response.data });
+          let sumFinal = 0;
+          Object.entries(this.state.ingredients).map(ingredient => {
+            if (ingredient[1] > 0) {
+              for (let i = 0; i < ingredient[1]; i++) {
+                sumFinal += INGREDIENT_PRICES[ingredient[0]];
+              }
+            }
+            return sumFinal;
+          });
+          this.updatePurchaseState(this.state.ingredients);
+          this.setState({ totalPrice: sumFinal + this.state.totalPrice })
+        })
+        .catch(error => this.setState({ error: true }));
     }
 
     updatePurchaseState(ingredients) {
@@ -120,7 +133,11 @@ export default withErrorHandler(
       }
       let orderSummary = null;
 
-      let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+      let burger = this.state.error ? (
+        <p>Ingredients can't be loaded!</p>
+      ) : (
+        <Spinner />
+      );
 
       if (this.state.ingredients) {
         burger = (
