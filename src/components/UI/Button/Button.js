@@ -2,6 +2,6 @@ import React from 'react'
 import "./Button.css"
 
 const Button = props => (
-    <button className={["Button", props.btnType].join(' ')} onClick={props.clicked}>{props.children}</button>
+    <button className={["Button", props.btnType].join(' ')} disabled={props.disabled} onClick={props.clicked}>{props.children}</button>
 );
 export default Button
