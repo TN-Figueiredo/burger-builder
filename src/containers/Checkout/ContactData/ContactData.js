@@ -39,11 +39,16 @@ class ContactData extends Component {
     loading: false
   };
 
-  createFormInput(placeholder, type = "input", rules = { required: true }) {
+  createFormInput(
+    placeholder,
+    elType = "input",
+    rules = { required: true },
+    type = "text"
+  ) {
     return {
-      elementType: type,
+      elementType: elType,
       elementConfig: {
-        type: "text",
+        type: type,
         placeholder: placeholder
       },
       value: "",
@@ -169,4 +174,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
