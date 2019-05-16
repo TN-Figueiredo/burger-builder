@@ -40,33 +40,34 @@ export const purchaseBurger = (orderData, token) => {
 export const purchaseInit = () => {
   return {
     type: actionTypes.PURCHASE_INIT
-  }
-}
+  };
+};
 
 export const fetchOrdersSuccess = orders => {
   return {
     type: actionTypes.FETCH_ORDERS_SUCCESS,
     orders: orders
-  }
-}
+  };
+};
 
 export const fetchOrdersFail = error => {
   return {
     type: actionTypes.FETCH_ORDERS_FAIL,
     error: error
-  }
-}
+  };
+};
 
 export const fetchOrdersStart = () => {
   return {
     type: actionTypes.FETCH_ORDERS_START
-  }
-}
-
+  };
+};
+//Corrected problem where only most recent orders were shown
 export const fetchOrders = (token, userId) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
-    const queryParams = "?auth=" + token + '&orderBy="userId"&equalTo="' + userId + '"';
+    const queryParams =
+      "?auth=" + token + '&orderBy="userId"&equalTo="' + userId + '"';
     axios
       .get("/orders.json" + queryParams)
       .then(res => {
@@ -77,10 +78,10 @@ export const fetchOrders = (token, userId) => {
             id: key
           });
         }
-        dispatch(fetchOrdersSuccess(fetchedOrders))
+        dispatch(fetchOrdersSuccess(fetchedOrders));
       })
       .catch(err => {
-        dispatch(fetchOrdersFail(err))
+        dispatch(fetchOrdersFail(err));
       });
-  }
-}
+  };
+};
