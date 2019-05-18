@@ -11,13 +11,12 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     purchasing: false
   };
 
   componentDidMount() {
-    console.log(this.props);
     this.props.onInitIngredients();
   }
 
@@ -84,7 +83,7 @@ class BurgerBuilder extends Component {
       orderSummary = (
         <OrderSummary
           purchaseCanceled={this.purchaseCancelHandler}
-          price={this.props.price.toFixed(2)}
+          price={this.props.price}
           purchaseContinued={this.purchaseContinueHandler}
           ingredients={this.props.ings}
         />

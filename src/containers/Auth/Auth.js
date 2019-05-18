@@ -6,6 +6,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import * as actions from "../../store/actions/index";
+import { updateObject, checkValidity } from "../../shared/utility";
 
 import "./Auth.css";
 
@@ -29,10 +30,10 @@ class Auth extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
-      this.props.onSetAuthRedirectPath();  
+    if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
+      this.props.onSetAuthRedirectPath();
     }
-  } 
+  }
 
   createFormInput(
     placeholder,
@@ -53,41 +54,17 @@ class Auth extends Component {
     };
   }
 
-  checkValidity(value, rules) {
-    let isValid = true;
-
-    if (!rules) {
-      return true; // This is here just in case I don't want to create a empty object for the select that doesn't require validation.
-    }
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, controlName) => {
-    const updatedControls = {
-      ...this.state.controls,
-      [controlName]: {
-        ...this.state.controls[controlName],
+    const updatedControls = updateObject(this.state.controls, {
+      [controlName]: updateObject(this.state.controls[controlName], {
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.controls[controlName].validation
         ),
         touched: true
-      }
-    };
+      })
+    });
     this.setState({ controls: updatedControls });
   };
 
@@ -128,32 +105,28 @@ class Auth extends Component {
       />
     ));
 
-    if(this.props.loading) {
-      form = <Spinner />
+    if (this.props.loading) {
+      form = <Spinner />;
     }
 
     let errorMessage = null;
-    if(this.props.error) {
-      errorMessage = (
-        <p>{this.props.error.message}</p>
-      )
+    if (this.props.error) {
+      errorMessage = <p>{this.props.error.message}</p>;
     }
     let authRedirect = null;
-    if(this.props.isAuthenticated) {
-      authRedirect = <Redirect to={this.props.authRedirectPath} />
+    if (this.props.isAuthenticated) {
+      authRedirect = <Redirect to={this.props.authRedirectPath} />;
     }
 
     return (
       <div className="Auth">
-      {authRedirect}
-      {errorMessage}
+        {authRedirect}
+        {errorMessage}
         <form onSubmit={this.submitHandler}>
           {form}
           <Button btnType="Success">SUBMIT</Button>
         </form>
-        <Button 
-        clicked={this.switchAuthModeHandler}
-        btnType="Danger">
+        <Button clicked={this.switchAuthModeHandler} btnType="Danger">
           SWITCH TO {this.state.isSignUp ? "SIGN IN" : "SIGN UP"}{" "}
         </Button>
       </div>
@@ -173,7 +146,8 @@ const mapDispatchToState = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password, isSignUp) => dispatch(actions.auth(email, password, isSignUp)),
+    onAuth: (email, password, isSignUp) =>
+      dispatch(actions.auth(email, password, isSignUp)),
     onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
   };
 };
