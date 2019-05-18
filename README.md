@@ -14,6 +14,6 @@ In this project you will find usage of:
 * Authentication and Authorization
 * Test Units
 
-### `npm test`
+### Unit Tests
 
-In this project there are 3 unit tests. 
+In this project there are 3 unit tests that can be executed by running `npm test`. 
